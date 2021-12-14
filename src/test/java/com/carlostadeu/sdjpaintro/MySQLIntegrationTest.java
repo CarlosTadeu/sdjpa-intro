@@ -1,8 +1,10 @@
 package com.carlostadeu.sdjpaintro;
 
 import com.carlostadeu.sdjpaintro.domain.AuthorUuid;
+import com.carlostadeu.sdjpaintro.domain.BookNatural;
 import com.carlostadeu.sdjpaintro.domain.BookUuid;
 import com.carlostadeu.sdjpaintro.repositories.AuthorUuidRepository;
+import com.carlostadeu.sdjpaintro.repositories.BookNaturalRepository;
 import com.carlostadeu.sdjpaintro.repositories.BookRepository;
 import com.carlostadeu.sdjpaintro.repositories.BookUuidRepository;
 import org.junit.jupiter.api.MethodOrderer;
@@ -29,6 +31,18 @@ public class MySQLIntegrationTest {
 
     @Autowired
     BookUuidRepository bookUuidRepository;
+
+    @Autowired
+    BookNaturalRepository bookNaturalRepository;
+
+    @Test
+    void bookNaturalTest() {
+        BookNatural bookNatural = new BookNatural();
+        bookNatural.setTitle("My Book");
+        BookNatural saved = bookNaturalRepository.save(bookNatural);
+
+        BookNatural fetched = bookNaturalRepository.getById(saved.getTitle());
+    }
 
     @Test
     void testBookUuid() {
