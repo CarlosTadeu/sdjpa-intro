@@ -3,10 +3,10 @@ package com.carlostadeu.sdjpaintro;
 import com.carlostadeu.sdjpaintro.domain.AuthorUuid;
 import com.carlostadeu.sdjpaintro.domain.BookNatural;
 import com.carlostadeu.sdjpaintro.domain.BookUuid;
-import com.carlostadeu.sdjpaintro.repositories.AuthorUuidRepository;
-import com.carlostadeu.sdjpaintro.repositories.BookNaturalRepository;
-import com.carlostadeu.sdjpaintro.repositories.BookRepository;
-import com.carlostadeu.sdjpaintro.repositories.BookUuidRepository;
+import com.carlostadeu.sdjpaintro.domain.composite.AuthorComposite;
+import com.carlostadeu.sdjpaintro.domain.composite.AuthorEmbedded;
+import com.carlostadeu.sdjpaintro.domain.composite.NameId;
+import com.carlostadeu.sdjpaintro.repositories.*;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -34,6 +34,39 @@ public class MySQLIntegrationTest {
 
     @Autowired
     BookNaturalRepository bookNaturalRepository;
+
+    @Autowired
+    AuthorCompositeRepository authorCompositeRepository;
+
+    @Autowired
+    AuthorEmbeddedRepository authorEmbeddedRepository;
+
+    @Test
+    void authorEmbeddedTest() {
+        NameId nameId = new NameId("Carlos", "T");
+        AuthorEmbedded authorEmbedded = new AuthorEmbedded(nameId);
+
+        AuthorEmbedded saved = authorEmbeddedRepository.save(authorEmbedded);
+        assertThat(saved).isNotNull();
+
+        AuthorEmbedded fetched = authorEmbeddedRepository.getById(nameId);
+        assertThat(fetched).isNotNull();
+    }
+
+    @Test
+    void authorCompositeTest() {
+        NameId nameId = new NameId("Carlos", "T");
+        AuthorComposite authorComposite = new AuthorComposite();
+        authorComposite.setFirstName(nameId.getFirstName());
+        authorComposite.setLastName(nameId.getLastName());
+        authorComposite.setCountry("US");
+
+        AuthorComposite saved = authorCompositeRepository.save(authorComposite);
+        assertThat(saved).isNotNull();
+
+        AuthorComposite fetched = authorCompositeRepository.getById(nameId);
+        assertThat(fetched).isNotNull();
+    }
 
     @Test
     void bookNaturalTest() {
